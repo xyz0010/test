@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preposition Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .container {
+            position: relative;
+            width: 800px;
+            height: 800px;
+            margin: 20px auto;
+            background-image: url('abc.jpg');
+            background-size: cover;
+            border: 2px solid #333;
+            border-radius: 10px;
+        }
+        .ball {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+            top: 700px;
+            left: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .word {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: green;
+            display: none;
+        }
+        #inWord { top: 160px; left: 180px; }
+        #onWord { top: 80px; left: 260px; }
+        /* Add more word positions here */
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="ball" class="ball"></div>
+    <div id="inWord" class="word">in</div>
+    <div id="onWord" class="word">on</div>
+    <!-- Add more words here -->
+</div>
+
+<script>
+    const ball = document.getElementById('ball');
+    const words = {
+        in: { element: document.getElementById('inWord'), xRange: [150, 210], yRange: [130, 190] },
+        on: { element: document.getElementById('onWord'), xRange: [230, 290], yRange: [50, 110] },
+        // Add more words and their corresponding positions here
+    };
+
+    let offsetX, offsetY, isDragging = false;
+
+    ball.addEventListener('mousedown', function(event) {
+        isDragging = true;
+        offsetX = event.clientX - ball.getBoundingClientRect().left;
+        offsetY = event.clientY - ball.getBoundingClientRect().top;
+    });
+
+    document.addEventListener('mousemove', function(event) {
+        if (isDragging) {
+            ball.style.left = (event.clientX - offsetX) + 'px';
+            ball.style.top = (event.clientY - offsetY) + 'px';
+        }
+    });
+
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+        checkPosition();
+    });
+
+    function checkPosition() {
+        const ballRect = ball.getBoundingClientRect();
+        for (let key in words) {
+            const word = words[key];
+            if (ballRect.left >= word.xRange[0] && ballRect.left <= word.xRange[1] &&
+                ballRect.top >= word.yRange[0] && ballRect.top <= word.yRange[1]) {
+                word.element.style.display = 'block';
+            } else {
+                word.element.style.display = 'none';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
